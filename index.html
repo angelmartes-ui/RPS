@@ -75,15 +75,17 @@
             transition: transform 0.6s ease-in-out;
         }
 
+        .tie-text {
+            font-size: 36px;
+            color: #ffcc00;
+            opacity: 0;
+            margin-top: 20px;
+            animation: fadeIn 1s forwards;
+        }
+
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes spin {
@@ -109,6 +111,10 @@
         .exploding {
             animation: explode 1s ease-in-out forwards;
         }
+
+        .tie {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
     </style>
 </head>
 <body>
@@ -129,6 +135,8 @@
         <div class="computer-emoji emoji">❔</div>
     </div>
 
+    <div class="tie-text" id="tieText">Tie!</div>
+
     <button class="retry-btn" style="display:none;">Retry</button>
 
     <script>
@@ -138,6 +146,7 @@
         const playerEmoji = document.querySelector('.player-emoji');
         const computerEmoji = document.querySelector('.computer-emoji');
         const retryBtn = document.querySelector('.retry-btn');
+        const tieText = document.querySelector('#tieText');
         const choices = ['rock', 'paper', 'scissors'];
         const emojiMap = {
             'rock': '✊',
@@ -168,6 +177,7 @@
             playerEmoji.textContent = emojiMap[player];
             computerEmoji.textContent = emojiMap[computer];
             resultArea.style.display = 'flex';
+            tieText.style.opacity = 0; // Reset tie text opacity
 
             // Spin animation for 2 seconds
             playerEmoji.classList.add('spinning');
@@ -177,8 +187,12 @@
                 playerEmoji.classList.remove('spinning');
                 computerEmoji.classList.remove('spinning');
 
-                // Explosion for the loser
-                if (result === "player") {
+                if (result === "draw") {
+                    playerEmoji.classList.add('exploding');
+                    computerEmoji.classList.add('exploding');
+                    tieText.style.opacity = 1;
+                    tieText.classList.add('tie');
+                } else if (result === "player") {
                     computerEmoji.classList.add('exploding');
                 } else if (result === "computer") {
                     playerEmoji.classList.add('exploding');
@@ -209,6 +223,7 @@
             choicesDiv.style.display = 'flex';
             playerEmoji.classList.remove('exploding');
             computerEmoji.classList.remove('exploding');
+            tieText.style.opacity = 0;
         });
     </script>
 
